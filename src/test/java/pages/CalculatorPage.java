@@ -100,8 +100,8 @@ public class CalculatorPage extends BasePage {
         driver.findElement(By.id("email_quote")).click();
         driver.findElement(By.cssSelector("input[name = description][type=email]")).click();
         Actions actionProvider = new Actions(driver);
-        Action keydown = actionProvider.keyDown(Keys.CONTROL).sendKeys("v").build();
-        ((Action) keydown).perform();
+        Action keyDown = actionProvider.keyDown(Keys.CONTROL).sendKeys("v").build();
+        ((Action) keyDown).perform();
         driver.findElement(By.cssSelector("button[type=button][aria-label='Send Email']")).click();
         driver.switchTo().window(mailWindow);
         WebElement loadOfButtonMail = (new WebDriverWait(driver, 10)).

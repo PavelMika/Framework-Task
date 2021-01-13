@@ -21,4 +21,5 @@ public class CalculatorPageTests extends BaseTest{
         calculatorPage.pushAddToEstimate();
         calculatorPage.checkTheMessageWithThePrice();
     }
+
 }
