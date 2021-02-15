@@ -1,5 +1,7 @@
 package pages;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
@@ -14,6 +16,7 @@ public class CalculatorPage extends BasePage {
     public CalculatorPage(WebDriver driver) {
         super(driver);
     }
+    private final Logger logger = LogManager.getRootLogger();
 
     private By devSiteSearch = By.className("devsite-search-form");
     private By googleSearch = By.xpath("//input[@class='devsite-search-field devsite-search-query']");
@@ -50,6 +53,8 @@ public class CalculatorPage extends BasePage {
 
     public void openCloudPage(){
         driver.get("https://cloud.google.com/");
+        logger.info("Opened cloud page");
+        return;
     }
 
     public void goToGoogleCloudPlatformPricingCalculatorPage(String keyForCalculatorPageOpening) {
@@ -59,6 +64,7 @@ public class CalculatorPage extends BasePage {
         textForGoogleSearch.sendKeys(keyForCalculatorPageOpening);
         textForGoogleSearch.sendKeys(Keys.ENTER);
         driver.findElement(switchToCalculator).click();
+        logger.info("Opened Google Cloud Calculator.");
     }
 
     public void sendKeyInToNumberOfInstancesField(String keyForNumberOfInstances) {
@@ -67,59 +73,73 @@ public class CalculatorPage extends BasePage {
         driver.switchTo().frame("myFrame");
         WebElement numberOfInstancesField = driver.findElement(instancesField);
         numberOfInstancesField.sendKeys(keyForNumberOfInstances);
+        logger.info("Added number of instances: ["+keyForNumberOfInstances+"].");
     }
 
     public void selectSeriesOfMachine() {
         driver.findElement(seriesOfMachine).click();
         driver.findElement(seriesOfMachineModel).click();
+        logger.info("Selected series of machine [N1].");
     }
 
     public void selectMachineType() {
         driver.findElement(machineType).click();
         driver.findElement(computeEngine).click();
+        logger.info("Selected machine type - compute engine.");
     }
 
     public void clickAddGpusCheckBox() {
+
         driver.findElement(gpusCheckBox).click();
+        logger.info("Pressed check box - Add GPUs.");
     }
 
     public void selectNumberOfGpus() {
         driver.findElement(numberOfGpus).click();
         driver.findElement(numberOfGpusModel).click();
+        logger.info("Selected number of Gpus [1].");
     }
 
     public void selectGpuType() {
         driver.findElement(gpuType).click();
         driver.findElement(gpuTypeModel).click();
+        logger.info("Selected gpu type [Nvidia Tesla V100].");
     }
 
     public void selectLocalSsd() {
         driver.findElement(localSsd).click();
         driver.findElement(localSsdModel).click();
+        logger.info("Selected local ssd [2*375GB].");
     }
 
     public void selectDataCenterLocation() {
         driver.findElement(dataCenterLocation).click();
         driver.findElement(dataCenterLocationInFrankfurt).click();
+        logger.info("Selected data center location [Frankfurt].");
     }
 
     public void selectCommittedUsage() {
         driver.findElement(committedUsage).click();
         driver.findElement(oneYearUsage).click();
+        logger.info("Selected committed usage [1 Year].");
     }
 
     public void pushAddToEstimate() {
         driver.findElement(addToEstimateButton).click();
+        logger.info("Pressed button [Add to estimate].");
     }
 
     public void checkTheMessageWithThePrice() {
+        logger.info("Test price in the massage.");
         String calculatorWindow = driver.getWindowHandle();
         ((JavascriptExecutor) driver).executeScript("window.open()");
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         driver.get("https://10minutemail.com/");
+        logger.info("Opened mail service.");
         String mailWindow = driver.getWindowHandle();
-        driver.findElement(addressOfMail).click();//
+        driver.findElement(addressOfMail).click();
+        logger.info("Got mail address");
         driver.switchTo().window(calculatorWindow);
         WebElement element = driver.findElement(newFirstFrame);
         driver.switchTo().frame(element);
@@ -131,6 +151,7 @@ public class CalculatorPage extends BasePage {
         Action keyDown = actionProvider.keyDown(Keys.CONTROL).sendKeys("v").build();
         ((Action) keyDown).perform();
         driver.findElement(emailSendingButton).click();
+        logger.info("Sent mail to the mail service");
         driver.switchTo().window(mailWindow);
         WebElement loadOfButtonMail = (new WebDriverWait(driver, 10)).
                 until(ExpectedConditions.presenceOfElementLocated(buttonMailPushing));
@@ -142,7 +163,7 @@ public class CalculatorPage extends BasePage {
         } else {
             overlap = false;
         }
-        assertTrue(overlap);
+        assertTrue(overlap, "The price is not same on the website and on the mail.");
+        logger.info("The price is same on the website and on the mail.");
     }
-
 }
